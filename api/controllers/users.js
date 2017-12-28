@@ -11,11 +11,16 @@ router.post('/', (req, res) => {
     .then(user => res.send(user));
 });
 
-router.get('/:userName', (req, res) => {
-  const userName = req.params.userName;
-  userDb.findByUserName(userName)
+router.get('/:username', (req, res, next) => {
+  const username = req.params.username;
+  userDb.findByUsername(username)
     .then(user => res.send(user))
-    .catch(() => res.status(404));
+    .catch(err => {
+      console.log(err);
+      const errorRes = new Error('User ' + username + ' not found');
+      errorRes.status = 404;
+      next(errorRes);
+    });
 });
 
 module.exports = router;
