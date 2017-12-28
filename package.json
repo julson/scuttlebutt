@@ -8,11 +8,17 @@
     "url": "https://github.com/julson/scuttlebutt.git"
   },
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha"
   },
   "dependencies": {
+    "config": "^1.29.0",
     "express": "^4.16.2",
     "morgan": "^1.9.0",
     "pg-promise": "^7.3.2"
+  },
+  "devDependencies": {
+    "mocha": "^4.0.1",
+    "supertest": "^3.0.0"
   }
 }

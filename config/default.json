@@ -1,0 +1,5 @@
+{
+  "dbConfig": {
+    "connectionString" : "postgres://localhost:5432/scuttlebutt"
+  }
+}

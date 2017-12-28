@@ -1,4 +1,5 @@
+const config = require('config');
 const pgp = require('pg-promise')();
-const connectionString = 'postgres://localhost:5432/scuttlebutt';
+const connectionString = config.get('dbConfig.connectionString');
 
 module.exports = pgp(connectionString);
