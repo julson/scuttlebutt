@@ -15,7 +15,7 @@ before(() => {
 });
 
 describe('User Routes', () => {
-  describe('Find users', () => {
+  describe('Find Users', () => {
     it('should return all users in the system', () => {
       return request(app)
         .get(baseRoute + '/')
@@ -27,6 +27,41 @@ describe('User Routes', () => {
 
           const user = users[0];
           assert.equal(user.username, 'john_doe');
+        });
+    });
+  });
+
+  describe('Find One User', () => {
+    it('should return one user given the username', () => {
+      return request(app)
+        .get(baseRoute + '/john_doe')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .then(res => {
+          const user = res.body;
+          assert.equal(user.username, 'john_doe');
+        });
+    });
+
+    it('should return a 404 if the user does not exist', () => {
+      return request(app)
+        .get(baseRoute + '/foobar')
+        .set('Accept', 'application/json')
+        .expect(404);
+    });
+  });
+
+  describe('Create User', () => {
+    it('should create a user', () => {
+      return request(app)
+        .post(baseRoute + '/')
+        .set('Accept', 'application/json')
+        .set('Content-type', 'application/json')
+        .send({username: 'jane_smith'})
+        .expect(200)
+        .then(res => {
+          const user = res.body;
+          assert.equal(user.username, 'jane_smith');
         });
     });
   });
