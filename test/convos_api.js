@@ -60,7 +60,6 @@ describe('Messaging Routes', () => {
         .expect(200)
         .then(res => {
           const log = res.body;
-          console.log(res.body);
           assert.equal(log.length, 3);
 
           assert(log[0].date_created <= log[1].date_created);
