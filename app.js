@@ -1,13 +1,12 @@
 const express = require('express');
 const logger = require('morgan');
-const user_controller = require('./api/controllers/users');
-
+const userController = require('./api/controllers/users');
 
 const app = express();
 app.use(logger('dev'));
 
 app.use(express.json());
-app.use('/api/v1/users', user_controller);
+app.use('/api/v1/users', userController);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

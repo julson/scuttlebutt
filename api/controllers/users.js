@@ -1,14 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const userDb = require('../db/users');
+const messageDb = require('../db/messages');
 
 router.get('/', (req, res) => {
   userDb.findAll().then(users => res.send(users));
 });
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   userDb.create(req.body)
-    .then(user => res.send(user));
+    .then(user => res.send(user))
+    .catch(next);
 });
 
 router.get('/:username', (req, res, next) => {
@@ -16,11 +18,20 @@ router.get('/:username', (req, res, next) => {
   userDb.findByUsername(username)
     .then(user => res.send(user))
     .catch(err => {
-      console.log(err);
       const errorRes = new Error('User ' + username + ' not found');
       errorRes.status = 404;
       next(errorRes);
     });
+});
+
+router.post('/:toUserId/convos/:fromUserId', (req, res, next) => {
+  const fromUserId = req.params.fromUserId;
+  const toUserId = req.params.toUserId;
+  const message = req.body.message;
+
+  messageDb.send(fromUserId, toUserId, message)
+    .then(() => res.sendStatus(200))
+    .catch(next);
 });
 
 module.exports = router;

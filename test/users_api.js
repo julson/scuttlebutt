@@ -7,14 +7,20 @@ const app = require('../app');
 
 const baseRoute = '/api/v1/users';
 
-before(() => {
-  return dbHelpers.clearTable('users')
-    .then(() => {
-      return userDb.create({username: 'john_doe'});
-    });
-});
+function clearAll() {
+  return dbHelpers.clearTable('users');
+}
 
 describe('User Routes', () => {
+
+  before(() => {
+    return clearAll()
+      .then(() => userDb.create({username: 'john_doe'}))
+      .then(user => this.user = user);
+  });
+
+  after(() => clearAll());
+
   describe('Find Users', () => {
     it('should return all users in the system', () => {
       return request(app)
@@ -62,6 +68,7 @@ describe('User Routes', () => {
         .then(res => {
           const user = res.body;
           assert.equal(user.username, 'jane_smith');
+          return userDb.deleteById(user.id);
         });
     });
   });
