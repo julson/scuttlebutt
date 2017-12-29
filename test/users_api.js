@@ -21,7 +21,7 @@ describe('User Routes', () => {
 
   after(() => clearAll());
 
-  describe('Find Users', () => {
+  describe('Find Users Route', () => {
     it('should return all users in the system', () => {
       return request(app)
         .get(baseRoute + '/')
@@ -37,7 +37,7 @@ describe('User Routes', () => {
     });
   });
 
-  describe('Find One User', () => {
+  describe('Get User Route', () => {
     it('should return one user given the username', () => {
       return request(app)
         .get(baseRoute + '/john_doe')
@@ -57,7 +57,7 @@ describe('User Routes', () => {
     });
   });
 
-  describe('Create User', () => {
+  describe('Create User Route', () => {
     it('should create a user', () => {
       return request(app)
         .post(baseRoute + '/')

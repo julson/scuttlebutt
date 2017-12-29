@@ -27,9 +27,11 @@ describe('Messaging Routes', () => {
       });
   });
 
+  afterEach(() => dbHelpers.clearTable('messages'));
+
   after(() => clearAll());
 
-  describe('Send message', () => {
+  describe('Send Message Route', () => {
     it('should send a message to a user', () => {
       const senderId = this.sender.id;
       const receiverId = this.receiver.id;
@@ -39,6 +41,39 @@ describe('Messaging Routes', () => {
         .set('Content-type', 'application/json')
         .send({message: 'Hello!'})
         .expect(200);
+    });
+  });
+
+  describe('Get Log Route', () => {
+    before(() => {
+      return messageDb.send(this.sender.id, this.receiver.id, 'Hello')
+        .then(() => messageDb.send(this.receiver.id, this.sender.id, 'Waddup'))
+        .then(() => messageDb.send(this.sender.id, this.receiver.id, 'Fine'));
+    });
+
+    it('should send the chat log for 2 users', () => {
+      const senderId = this.sender.id;
+      const receiverId = this.receiver.id;
+      return request(app)
+        .get(util.format('%s/%s/convos/%s', baseRoute, receiverId, senderId))
+        .set('Accept', 'application/json')
+        .expect(200)
+        .then(res => {
+          const log = res.body;
+          console.log(res.body);
+          assert.equal(log.length, 3);
+
+          assert(log[0].date_created <= log[1].date_created);
+          assert.equal(log[0].text, 'Hello');
+          assert.equal(log[0].username, this.sender.username);
+
+          assert(log[1].date_created <= log[2].date_created);
+          assert.equal(log[1].text, 'Waddup');
+          assert.equal(log[1].username, this.receiver.username);
+
+          assert.equal(log[2].text, 'Fine');
+          assert.equal(log[2].username, this.sender.username);
+        });
     });
   });
 });

@@ -34,4 +34,12 @@ router.post('/:toUserId/convos/:fromUserId', (req, res, next) => {
     .catch(next);
 });
 
+router.get('/:toUserId/convos/:fromUserId', (req, res) => {
+  const fromUserId = req.params.fromUserId;
+  const toUserId = req.params.toUserId;
+
+  messageDb.getLog(fromUserId, toUserId)
+    .then(log => res.send(log));
+});
+
 module.exports = router;
