@@ -12,6 +12,6 @@ module.exports = {
           + 'where (m.from_user_id = $1 and m.to_user_id = $2) '
           + 'or (m.from_user_id = $2 and m.to_user_id = $1) '
           + 'order by m.date_created asc';
-    return db.many(stmt, [fromUserId, toUserId]);
+    return db.any(stmt, [fromUserId, toUserId]);
   }
 };

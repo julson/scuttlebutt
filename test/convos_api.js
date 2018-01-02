@@ -38,9 +38,19 @@ describe('Messaging Routes', () => {
       return request(app)
         .post(util.format('%s/%s/convos/%s', baseRoute, receiverId, senderId))
         .set('Accept', 'application/json')
-        .set('Content-type', 'application/json')
+        .set('Content-Type', 'application/json')
         .send({message: 'Hello!'})
         .expect(200);
+    });
+
+    it('should not be able to send a message to self', () => {
+      const senderId = this.sender.id;
+      return request(app)
+        .post(util.format('%s/%s/convos/%s', baseRoute, senderId, senderId))
+        .set('Accept', 'application/json')
+        .set('Content-Type', 'application/json')
+        .send({message: 'Hello!'})
+        .expect(400);
     });
   });
 
@@ -73,6 +83,14 @@ describe('Messaging Routes', () => {
           assert.equal(log[2].text, 'Fine');
           assert.equal(log[2].username, this.sender.username);
         });
+    });
+
+    it('should not be able to get a log of messages to self', () => {
+      const senderId = this.sender.id;
+      return request(app)
+        .get(util.format('%s/%s/convos/%s', baseRoute, senderId, senderId))
+        .set('Accept', 'application/json')
+        .expect(400);
     });
   });
 });

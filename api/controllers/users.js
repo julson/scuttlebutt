@@ -29,17 +29,29 @@ router.post('/:toUserId/convos/:fromUserId', (req, res, next) => {
   const toUserId = req.params.toUserId;
   const message = req.body.message;
 
-  messageDb.send(fromUserId, toUserId, message)
-    .then(() => res.sendStatus(200))
-    .catch(next);
+  if (fromUserId === toUserId) {
+    const errorRes = new Error('You cannot send a message to yourself!');
+    errorRes.status = 400;
+    next(errorRes);
+  } else {
+    messageDb.send(fromUserId, toUserId, message)
+      .then(() => res.sendStatus(200))
+      .catch(next);
+  }
 });
 
-router.get('/:toUserId/convos/:fromUserId', (req, res) => {
+router.get('/:toUserId/convos/:fromUserId', (req, res, next) => {
   const fromUserId = req.params.fromUserId;
   const toUserId = req.params.toUserId;
 
-  messageDb.getLog(fromUserId, toUserId)
-    .then(log => res.send(log));
+  if (fromUserId === toUserId) {
+    const errorRes = new Error('You cannot send a message to yourself!');
+    errorRes.status = 400;
+    next(errorRes);
+  } else {
+    messageDb.getLog(fromUserId, toUserId)
+      .then(log => res.send(log));
+  }
 });
 
 module.exports = router;
