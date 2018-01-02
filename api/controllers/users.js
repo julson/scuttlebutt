@@ -13,12 +13,12 @@ router.post('/', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/:username', (req, res, next) => {
-  const username = req.params.username;
-  userDb.findByUsername(username)
+router.get('/:userId', (req, res, next) => {
+  const userId = req.params.userId;
+  userDb.findById(userId)
     .then(user => res.send(user))
     .catch(err => {
-      const errorRes = new Error('User ' + username + ' not found');
+      const errorRes = new Error('User ' + userId + ' not found');
       errorRes.status = 404;
       next(errorRes);
     });

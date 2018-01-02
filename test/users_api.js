@@ -38,9 +38,9 @@ describe('User Routes', () => {
   });
 
   describe('Get User Route', () => {
-    it('should return one user given the username', () => {
+    it('should return one user given its ID', () => {
       return request(app)
-        .get(baseRoute + '/john_doe')
+        .get(baseRoute + '/' + this.user.id)
         .set('Accept', 'application/json')
         .expect(200)
         .then(res => {

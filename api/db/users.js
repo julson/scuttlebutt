@@ -5,6 +5,8 @@ function findById(id) {
 }
 
 module.exports = {
+  findById,
+
   findByUsername(username) {
     return db.one('select * from users where username = $1', [username]);
   },
