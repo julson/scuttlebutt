@@ -90,7 +90,7 @@ Example Response:
   { "username": "john_doe",
     "text": "Fine",
     "date_created": "2018-01-01T00:00:00.154Z" } ]
-    ```
+```
 
 ### `POST /api/v1/users/<receiverId>/convos/<senderId>`
 
