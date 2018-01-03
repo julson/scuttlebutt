@@ -42,7 +42,7 @@ Example Response:
   "date_created": "2018-01-01T00:00:24.239Z" }]
 ```
 
-### `GET /api/v1/users/<userId>
+### `GET /api/v1/users/<userId>`
 
 Retrieves a user with the given `userId`
 
